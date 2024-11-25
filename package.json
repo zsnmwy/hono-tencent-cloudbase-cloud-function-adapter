@@ -3,17 +3,40 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "eslint --fix .",
+    "lint-check": "eslint . --no-fix",
+    "format": "prettier --write src",
+    "format-check": "prettier --check src",
+    "type-check": "tsc --noEmit",
+    "prepare": "husky"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "packageManager": "pnpm@9.12.3+sha512.cce0f9de9c5a7c95bef944169cc5dfe8741abfb145078c0d508b868056848a87c81e626246cb60967cbd7fd29a6c062ef73ff840d96b3c86c40ac92cf4a813ee",
   "devDependencies": {
-    "hono": "^4.6.12"
+    "@commitlint/cli": "^19.6.0",
+    "@commitlint/config-conventional": "^19.6.0",
+    "@commitlint/types": "^19.5.0",
+    "@eslint/js": "^9.15.0",
+    "@types/eslint__js": "^8.42.3",
+    "eslint": "^9.15.0",
+    "hono": "^4.6.12",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.2.10",
+    "prettier": "^3.3.3",
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.15.0"
   },
   "peerDependencies": {
     "hono": "^4.6.12"
+  },
+  "lint-staged": {
+    "*.{js,ts,jsx,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
   }
 }
