@@ -8,6 +8,6 @@ export default tseslint.config(
   ...tseslint.configs.strict,
   ...tseslint.configs.stylistic,
   {
-    ignores: [".wrangler/*", "src/vendors"],
-  },
+    ignores: ["dist/*"],
+  }
 );

@@ -5,6 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "build": "tsc",
     "lint": "eslint --fix .",
     "lint-check": "eslint . --no-fix",
     "format": "prettier --write src",
@@ -24,6 +25,7 @@
     "@commitlint/types": "^19.5.0",
     "@eslint/js": "^9.15.0",
     "@types/eslint__js": "^8.42.3",
+    "@types/node": "^22.9.3",
     "@vitest/coverage-v8": "2.1.5",
     "eslint": "^9.15.0",
     "hono": "^4.6.12",
