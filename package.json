@@ -10,6 +10,7 @@
     "dist"
   ],
   "scripts": {
+    "prepublishOnly": "pnpm build",
     "build": "tsc",
     "lint": "eslint --fix .",
     "lint-check": "eslint . --no-fix",
