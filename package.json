@@ -2,8 +2,13 @@
   "name": "hono-alibaba-cloud-fc3-adapter",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "lib/index.js",
+  "module": "lib/index.js",
+  "types": "lib/index.d.ts",
   "type": "module",
+  "files": [
+    "lib"
+  ],
   "scripts": {
     "build": "tsc",
     "lint": "eslint --fix .",
