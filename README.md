@@ -1,6 +1,8 @@
 # Hono Alibaba Cloud FC3 Adapter
 
 [![Build](https://github.com/rwv/hono-alibaba-cloud-fc3-adapter/actions/workflows/build.yml/badge.svg)](https://github.com/rwv/hono-alibaba-cloud-fc3-adapter/actions/workflows/build.yml)
+[![NPM Version](https://img.shields.io/npm/v/hono-alibaba-cloud-fc3-adapter)](https://www.npmjs.com/package/hono-alibaba-cloud-fc3-adapter)
+![GitHub License](https://img.shields.io/github/license/rwv/hono-alibaba-cloud-fc3-adapter)
 
 An adapter for using [Hono](https://hono.dev) with [Alibaba Cloud Function Compute 3.0](https://www.alibabacloud.com/help/en/functioncompute/fc-3-0).
 
