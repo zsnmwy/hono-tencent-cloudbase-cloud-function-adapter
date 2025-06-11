@@ -18,12 +18,21 @@ const requiredFiles = [
 ];
 
 console.log("\n📁 Checking required files...");
+let missingFiles = [];
 for (const file of requiredFiles) {
   if (!fs.existsSync(file)) {
     console.error(`❌ Missing required file: ${file}`);
-    process.exit(1);
+    missingFiles.push(file);
+  } else {
+    console.log(`✅ ${file}`);
   }
-  console.log(`✅ ${file}`);
+}
+
+if (missingFiles.length > 0) {
+  console.error("\n💡 To fix missing files, run:");
+  console.error("   pnpm run build");
+  console.error("\n📋 This will generate the required distribution files.");
+  process.exit(1);
 }
 
 // 检查 package.json 配置
