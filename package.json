@@ -16,7 +16,7 @@
     "dist"
   ],
   "scripts": {
-    "prepublishOnly": "pnpm build",
+    "prepublishOnly": "node scripts/pre-publish.js",
     "build": "pnpm build:cjs && pnpm build:esm",
     "build:cjs": "tsc -p tsconfig.cjs.json",
     "build:esm": "tsc -p tsconfig.esm.json",
@@ -27,7 +27,10 @@
     "type-check": "tsc --noEmit",
     "prepare": "husky",
     "test": "vitest",
-    "coverage": "vitest --coverage"
+    "coverage": "vitest --coverage",
+    "test:build": "pnpm build && node test-nodejs18.js && node test-esm.mjs",
+    "release:dry": "pnpm publish --dry-run",
+    "release:check": "node scripts/pre-publish.js"
   },
   "keywords": [
     "hono",
