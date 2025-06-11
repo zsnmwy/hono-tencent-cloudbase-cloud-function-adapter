@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/zsnmwy/hono-tencent-cloudbase-cloud-function-adapter/compare/v1.1.0...v1.1.1) (2025-06-11)
+
+
+### Bug Fixes
+
+* export all types ([4abf975](https://github.com/zsnmwy/hono-tencent-cloudbase-cloud-function-adapter/commit/4abf97510edc96973290c2689422106be9f682dc))
+
 ## [1.1.0](https://github.com/zsnmwy/hono-tencent-cloudbase-cloud-function-adapter/compare/v1.0.1...v1.1.0) (2025-06-11)
 
 
