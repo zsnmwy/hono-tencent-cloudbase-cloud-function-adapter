@@ -1,9 +1,10 @@
 {
     "compilerOptions": {
-        "target": "ES2022",
+        "target": "ES2020",
         "module": "ESNext",
-        "moduleResolution": "Bundler",
+        "moduleResolution": "Node",
         "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
         "strict": true,
         "skipLibCheck": true,
         "forceConsistentCasingInFileNames": true,
@@ -12,7 +13,7 @@
         "declaration": true,
         "declarationMap": true,
         "lib": [
-            "ESNext",
+            "ES2020",
             "DOM"
         ],
         "rootDir": "src",

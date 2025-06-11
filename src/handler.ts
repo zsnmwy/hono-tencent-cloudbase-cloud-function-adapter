@@ -2,18 +2,19 @@ import type { Hono } from "hono";
 import type { Env, Schema } from "hono/types";
 import { decodeBase64, encodeBase64 } from "hono/utils/encode";
 import type {
-  AlibabaCloudFC3Context,
-  AlibabaCloudFC3Event,
-  AlibabaCloudFC3EventRaw,
-  AlibabaCloudFC3Handler,
-} from "./types";
+  TencentCloudBaseContext,
+  TencentCloudBaseEvent,
+  TencentCloudBaseEventRaw,
+  TencentCloudBaseHandler,
+} from "./types.js";
 
-const parseEvent = (event: AlibabaCloudFC3EventRaw): AlibabaCloudFC3Event => {
-  return JSON.parse(event.toString("utf-8"));
+const parseEvent = (event: TencentCloudBaseEventRaw): TencentCloudBaseEvent => {
+  // Tencent CloudBase event is already a parsed object, no need to parse
+  return event;
 };
 
 /**
- * Accepts events from Alibaba Cloud FC3 and return Alibaba Cloud FC3 responses
+ * Accepts events from Tencent CloudBase and return Tencent CloudBase responses
  */
 export const handle = <
   E extends Env = Env,
@@ -22,10 +23,10 @@ export const handle = <
   BasePath extends string = "/",
 >(
   app: Hono<E, S, BasePath>,
-): AlibabaCloudFC3Handler => {
+): TencentCloudBaseHandler => {
   return async (
-    eventRaw: AlibabaCloudFC3EventRaw,
-    context: AlibabaCloudFC3Context,
+    eventRaw: TencentCloudBaseEventRaw,
+    context: TencentCloudBaseContext,
   ) => {
     const event = parseEvent(eventRaw);
     const req = createRequest(event);
@@ -38,16 +39,16 @@ export const handle = <
   };
 };
 
-export const createRequest = (event: AlibabaCloudFC3Event): Request => {
-  const url = new URL(
-    `https://${event.requestContext.domainName}${event.rawPath}`,
-  );
+export const createRequest = (event: TencentCloudBaseEvent): Request => {
+  // For Tencent CloudBase, we need to construct a proper URL
+  // Since we don't have a domain name in the event, we'll use a placeholder
+  const url = new URL(`https://cloudbase.example.com${event.path}`);
 
-  const params = new URLSearchParams(event.queryParameters);
+  const params = new URLSearchParams(event.queryStringParameters);
   url.search = params.toString();
   const headers = new Headers(event.headers);
 
-  const method = event.requestContext.http.method;
+  const method = event.httpMethod;
   const requestInit: RequestInit = {
     headers,
     method,
