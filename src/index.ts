@@ -4,8 +4,5 @@
  */
 
 export { handle } from "./handler.js";
-export type {
-  TencentCloudBaseContext,
-  TencentCloudBaseEvent,
-} from "./types.js";
+export type * from "./types.js";
 export { handle as default } from "./handler.js";
