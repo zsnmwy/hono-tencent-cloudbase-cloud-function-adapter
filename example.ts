@@ -27,6 +27,25 @@ app.get("/api/search", (c) => {
   return c.json({ query, results: [] });
 });
 
+// Handle timer trigger events
+// Timer events are automatically converted to GET requests with path: /CLOUDBASE_TIMER_TRIGGER/${TriggerName}
+app.get("/CLOUDBASE_TIMER_TRIGGER/:triggerName", (c) => {
+  const triggerName = c.req.param("triggerName");
+
+  // Access the original timer event from the environment
+  const originalTimerEvent = c.env?.originalTimerEvent;
+
+  console.log(`Timer triggered: ${triggerName}`);
+  console.log(`Timer event:`, originalTimerEvent);
+
+  // Perform your scheduled task here
+  return c.json({
+    message: `Timer ${triggerName} executed successfully`,
+    timestamp: new Date().toISOString(),
+    originalEvent: originalTimerEvent,
+  });
+});
+
 // Export the handler for CloudBase
 export const handler = handle(app);
 
@@ -69,5 +88,34 @@ async function testExample() {
   console.log("Response:", response);
 }
 
-// Run the test
+// Timer event test
+async function testTimerExample() {
+  const timerEvent = {
+    Message: "",
+    Time: "2025-06-11T05:06:40Z",
+    TriggerName: "myTrigger",
+    Type: "Timer" as const,
+  };
+
+  const context = {
+    callbackWaitsForEmptyEventLoop: false,
+    memory_limit_in_mb: 128,
+    time_limit_in_ms: 30000,
+    request_id: "timer-request-id",
+    environment: {},
+    environ: "test",
+    function_version: "1.0.0",
+    function_name: "test-function",
+    namespace: "default",
+    tencentcloud_region: "ap-beijing",
+    tencentcloud_appid: "123456789",
+    tencentcloud_uin: "123456789",
+  };
+
+  const response = await handler(timerEvent, context);
+  console.log("Timer Response:", response);
+}
+
+// Run the tests
 testExample();
+testTimerExample();

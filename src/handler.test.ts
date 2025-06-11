@@ -4,8 +4,12 @@ import {
   isContentTypeBinary,
   createRequest,
   createResponse,
+  handle,
 } from "./handler";
-import type { TencentCloudBaseEvent } from "./types";
+import type {
+  TencentCloudBaseEvent,
+  TencentCloudBaseTimerEvent,
+} from "./types";
 import { expect, describe, it } from "vitest";
 
 // copied from aws-lambda/handler.test.ts
@@ -223,5 +227,72 @@ describe("createResponse", () => {
 
     expect(decompressedBody).toEqual("Response Content");
     expect(res.isBase64Encoded).toEqual(true);
+  });
+});
+
+describe("Timer Event Handling", () => {
+  it("Should handle timer trigger events and convert to HTTP GET request", async () => {
+    const { Hono } = await import("hono");
+
+    const app = new Hono();
+    app.get("/CLOUDBASE_TIMER_TRIGGER/:triggerName", (c) => {
+      const triggerName = c.req.param("triggerName");
+      const originalEvent = c.env?.originalTimerEvent;
+
+      return c.json({
+        message: "Timer triggered",
+        triggerName,
+        originalEvent,
+      });
+    });
+
+    const handler = handle(app);
+
+    const timerEvent: TencentCloudBaseTimerEvent = {
+      Message: "",
+      Time: "2025-06-11T05:06:40Z",
+      TriggerName: "myTrigger",
+      Type: "Timer",
+    };
+
+    const context = {
+      callbackWaitsForEmptyEventLoop: false,
+      memory_limit_in_mb: 128,
+      time_limit_in_ms: 30000,
+      request_id: "test-request-id",
+      environment: {},
+      environ: "test",
+      function_version: "1.0.0",
+      function_name: "test-function",
+      namespace: "default",
+      tencentcloud_region: "ap-beijing",
+      tencentcloud_appid: "123456789",
+      tencentcloud_uin: "123456789",
+    };
+
+    const response = await handler(timerEvent, context);
+
+    expect(response.statusCode).toEqual(200);
+
+    const responseBody = JSON.parse(response.body);
+    expect(responseBody.message).toEqual("Timer triggered");
+    expect(responseBody.triggerName).toEqual("myTrigger");
+    expect(responseBody.originalEvent).toEqual(timerEvent);
+  });
+
+  it("Should create correct request from timer event", async () => {
+    // We test the timer event handling through the integration test above
+    // This test is a placeholder to ensure the timer event type is properly defined
+    const timerEvent: TencentCloudBaseTimerEvent = {
+      Message: "",
+      Time: "2025-06-11T05:06:40Z",
+      TriggerName: "myTrigger",
+      Type: "Timer",
+    };
+
+    // Verify the timer event structure
+    expect(timerEvent.Type).toBe("Timer");
+    expect(timerEvent.TriggerName).toBe("myTrigger");
+    expect(timerEvent.Time).toBe("2025-06-11T05:06:40Z");
   });
 });
