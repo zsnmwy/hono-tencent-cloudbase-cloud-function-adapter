@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.0](https://github.com/zsnmwy/hono-tencent-cloudbase-cloud-function-adapter/compare/v1.0.1...v1.1.0) (2025-06-11)
+
+
+### Features
+
+* add support for CloudBase timer trigger events ([eae6295](https://github.com/zsnmwy/hono-tencent-cloudbase-cloud-function-adapter/commit/eae62955cc2d4d9c4d6ce34c5eba7cf0c712a2b4))
+* add support for CloudBase timer trigger events ([ca17dfc](https://github.com/zsnmwy/hono-tencent-cloudbase-cloud-function-adapter/commit/ca17dfc6c03ada7a0f38ad09105a4ca419555746)), closes [#6](https://github.com/zsnmwy/hono-tencent-cloudbase-cloud-function-adapter/issues/6)
+
 ## [1.0.1](https://github.com/zsnmwy/hono-tencent-cloudbase-cloud-function-adapter/compare/v1.0.0...v1.0.1) (2025-06-11)
 
 
