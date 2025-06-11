@@ -1,6 +1,6 @@
 // CommonJS example for Node.js 18+ compatibility
 const { Hono } = require("hono");
-const { handle } = require("./dist/index");
+const { handle } = require("./dist/cjs/index");
 
 const app = new Hono();
 

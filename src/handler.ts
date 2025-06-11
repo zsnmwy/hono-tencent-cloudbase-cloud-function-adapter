@@ -6,7 +6,7 @@ import type {
   TencentCloudBaseEvent,
   TencentCloudBaseEventRaw,
   TencentCloudBaseHandler,
-} from "./types";
+} from "./types.js";
 
 const parseEvent = (event: TencentCloudBaseEventRaw): TencentCloudBaseEvent => {
   // Tencent CloudBase event is already a parsed object, no need to parse

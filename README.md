@@ -21,6 +21,60 @@ npm install hono-tencent-cloudbase-cloud-function-adapter
 
 ## Usage
 
+### CommonJS (Node.js 18+)
+
+```javascript
+const { Hono } = require("hono");
+const { handle } = require("hono-tencent-cloudbase-cloud-function-adapter");
+
+const app = new Hono();
+
+app.get("/", (c) => c.text("Hello Hono!"));
+
+exports.handler = handle(app);
+```
+
+### ES Module (Node.js 18+)
+
+For ES Module support in Tencent CloudBase, you need a hybrid approach:
+
+**index.js** (CommonJS entry point - required by CloudBase):
+```javascript
+exports.main = async (event, context) => {
+    const { entry } = await import('./entry.mjs');
+    return entry(event, context);
+};
+```
+
+**entry.mjs** (ES Module):
+```javascript
+import { Hono } from "hono";
+import { handle } from "hono-tencent-cloudbase-cloud-function-adapter";
+
+const app = new Hono();
+
+app.get("/", (c) => c.text("Hello Hono!"));
+
+const handler = handle(app);
+
+export const entry = (event, context) => {
+  return handler(event, context);
+};
+```
+
+**package.json**:
+```json
+{
+  "type": "module",
+  "dependencies": {
+    "hono": "^4.6.12",
+    "hono-tencent-cloudbase-cloud-function-adapter": "^1.0.0"
+  }
+}
+```
+
+### TypeScript
+
 ```typescript
 import { Hono } from "hono";
 import { handle } from "hono-tencent-cloudbase-cloud-function-adapter";
@@ -32,7 +86,9 @@ app.get("/", (c) => c.text("Hello Hono!"));
 export const handler = handle(app);
 ```
 
-For more details, check out [Tencent CloudBase Cloud Function Documentation](https://docs.cloudbase.net/service/access-cloud-function).
+For more details, check out:
+- [Tencent CloudBase Cloud Function Documentation](https://docs.cloudbase.net/service/access-cloud-function)
+- [ES Module Usage Guide](./ES_MODULE_GUIDE.md) - Detailed guide for using ES Module in CloudBase
 
 ## Example
 

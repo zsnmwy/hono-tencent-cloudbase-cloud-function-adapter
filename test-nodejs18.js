@@ -1,5 +1,5 @@
 // Node.js 18 compatibility test for the compiled adapter
-const { handle } = require("./dist/index");
+const { handle } = require("./dist/cjs/index");
 
 // Mock Hono app for testing
 const mockApp = {
