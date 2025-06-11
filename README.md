@@ -114,13 +114,107 @@ app.post("/api/data", async (c) => {
   return c.json({ received: body });
 });
 
+// Handle timer trigger events
+// Timer events are automatically converted to GET requests with path: /CLOUDBASE_TIMER_TRIGGER/${TriggerName}
+app.get("/CLOUDBASE_TIMER_TRIGGER/:triggerName", (c) => {
+  const triggerName = c.req.param("triggerName");
+
+  // Access the original timer event from the environment
+  const originalTimerEvent = c.env?.originalTimerEvent;
+
+  console.log(`Timer triggered: ${triggerName}`);
+  console.log(`Timer event:`, originalTimerEvent);
+
+  // Perform your scheduled task here
+  return c.json({
+    message: `Timer ${triggerName} executed successfully`,
+    timestamp: new Date().toISOString(),
+    originalEvent: originalTimerEvent,
+  });
+});
+
 // Export the handler for CloudBase
 export const handler = handle(app);
 ```
 
+## Timer Trigger Support
+
+This adapter supports Tencent CloudBase timer trigger events. Timer events are automatically converted to HTTP GET requests with a special path format.
+
+### Timer Configuration
+
+Configure your timer trigger in the CloudBase function configuration:
+
+```json
+{
+  "triggers": [
+    {
+      "name": "myTrigger",
+      "type": "timer",
+      "config": "*/5 * * * * * *"
+    }
+  ]
+}
+```
+
+### Timer Event Handling
+
+Timer events are automatically converted to GET requests with the path `/CLOUDBASE_TIMER_TRIGGER/${TriggerName}`:
+
+```typescript
+import { Hono } from "hono";
+import { handle } from "hono-tencent-cloudbase-cloud-function-adapter";
+
+const app = new Hono();
+
+// Handle timer trigger events
+app.get("/CLOUDBASE_TIMER_TRIGGER/:triggerName", (c) => {
+  const triggerName = c.req.param("triggerName");
+
+  // Access the original timer event from the environment
+  const originalTimerEvent = c.env?.originalTimerEvent;
+
+  console.log(`Timer triggered: ${triggerName}`);
+  console.log(`Original event:`, originalTimerEvent);
+
+  // Perform your scheduled task here
+  return c.json({
+    message: `Timer ${triggerName} executed successfully`,
+    timestamp: new Date().toISOString(),
+  });
+});
+
+export const handler = handle(app);
+```
+
+### Timer Event Structure
+
+The original timer event is available in `c.env.originalTimerEvent` with the following structure:
+
+```typescript
+{
+  Message: string;
+  Time: string;        // ISO 8601 timestamp
+  TriggerName: string; // The name of the timer trigger
+  Type: "Timer";
+}
+```
+
+Example timer event:
+```json
+{
+  "Message": "",
+  "Time": "2025-06-11T05:06:40Z",
+  "TriggerName": "myTrigger",
+  "Type": "Timer"
+}
+```
+
 ## Event Format
 
-The adapter automatically converts Tencent CloudBase HTTP events to standard Request objects and Response objects back to CloudBase format. The CloudBase event structure includes:
+The adapter automatically converts Tencent CloudBase HTTP events to standard Request objects and Response objects back to CloudBase format.
+
+### HTTP Event Structure
 
 ```typescript
 {

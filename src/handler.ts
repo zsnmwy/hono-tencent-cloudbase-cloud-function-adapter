@@ -6,11 +6,39 @@ import type {
   TencentCloudBaseEvent,
   TencentCloudBaseEventRaw,
   TencentCloudBaseHandler,
+  TencentCloudBaseTimerEvent,
 } from "./types.js";
 
+const isTimerEvent = (
+  event: TencentCloudBaseEventRaw,
+): event is TencentCloudBaseTimerEvent => {
+  return "Type" in event && event.Type === "Timer";
+};
+
 const parseEvent = (event: TencentCloudBaseEventRaw): TencentCloudBaseEvent => {
-  // Tencent CloudBase event is already a parsed object, no need to parse
-  return event;
+  // If it's a timer event, convert it to HTTP event format
+  if (isTimerEvent(event)) {
+    return {
+      path: `/CLOUDBASE_TIMER_TRIGGER/${event.TriggerName}`,
+      httpMethod: "GET",
+      headers: {
+        "content-type": "application/json",
+        "user-agent": "cloudbase-timer-trigger",
+      },
+      queryStringParameters: {},
+      requestContext: {
+        requestId: `timer-${Date.now()}`,
+        envId: "timer-trigger",
+        appId: 0,
+        uin: 0,
+      },
+      body: "",
+      isBase64Encoded: false,
+    };
+  }
+
+  // For regular HTTP events, return as-is
+  return event as TencentCloudBaseEvent;
 };
 
 /**
@@ -30,10 +58,20 @@ export const handle = <
   ) => {
     const event = parseEvent(eventRaw);
     const req = createRequest(event);
-    const res = await app.fetch(req, {
-      event,
-      context,
-    });
+
+    // Add original event to the environment for timer events
+    const env = isTimerEvent(eventRaw)
+      ? {
+          event: eventRaw,
+          context,
+          originalTimerEvent: eventRaw,
+        }
+      : {
+          event,
+          context,
+        };
+
+    const res = await app.fetch(req, env);
 
     return createResponse(res);
   };

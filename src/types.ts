@@ -14,8 +14,18 @@ export interface TencentCloudBaseEvent {
   isBase64Encoded: boolean;
 }
 
-// Tencent CloudBase event is passed as a regular object, not a buffer
-export type TencentCloudBaseEventRaw = TencentCloudBaseEvent;
+// Timer trigger event structure
+export interface TencentCloudBaseTimerEvent {
+  Message: string;
+  Time: string;
+  TriggerName: string;
+  Type: "Timer";
+}
+
+// Tencent CloudBase event can be either HTTP event or Timer event
+export type TencentCloudBaseEventRaw =
+  | TencentCloudBaseEvent
+  | TencentCloudBaseTimerEvent;
 
 // https://docs.cloudbase.net/service/access-cloud-function
 // Tencent CloudBase context object
