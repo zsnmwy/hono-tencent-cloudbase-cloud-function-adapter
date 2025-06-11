@@ -8,6 +8,11 @@ An adapter for using [Hono](https://hono.dev) with [Tencent CloudBase Cloud Func
 
 一个用于在[腾讯云开发云函数](https://docs.cloudbase.net/service/access-cloud-function) 中使用 [Hono](https://hono.dev) 的适配器。
 
+## Requirements
+
+- Node.js 18.0.0 or higher
+- Tencent CloudBase Cloud Function environment
+
 ## Installation
 
 ```bash

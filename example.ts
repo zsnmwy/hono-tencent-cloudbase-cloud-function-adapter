@@ -1,6 +1,10 @@
 import { Hono } from "hono";
 import { handle } from "./src/index";
 
+// For CommonJS usage (Node.js 18+):
+// const { Hono } = require("hono");
+// const { handle } = require("hono-tencent-cloudbase-cloud-function-adapter");
+
 const app = new Hono();
 
 // Basic route
